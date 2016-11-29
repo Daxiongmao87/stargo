@@ -11,3 +11,5 @@ the game to be played even on PC.
 7. go to File --> Create Application
 8. Name the file as you wish.
 9. You have a compiled execution file for our project!
+
+Alternatively, if you don't want to do a full compile, but want to test it, you can just load the project and push the play button!
