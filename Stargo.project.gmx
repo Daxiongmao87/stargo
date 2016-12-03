@@ -33,6 +33,9 @@
   </sprites>
   <backgrounds name="background"/>
   <paths name="paths"/>
+  <shaders name="shaders">
+    <shader type="GLSLES">shaders\shader0.shader</shader>
+  </shaders>
   <fonts name="fonts">
     <font>fonts\main_cont</font>
   </fonts>
@@ -44,8 +47,8 @@
     <object>objects\obj_asteroid</object>
     <object>objects\obj_dust</object>
     <object>objects\obj_ship</object>
-    <object>objects\obj_levelControl</object>
     <object>objects\obj_bgPlanet</object>
+    <object>objects\obj_levelControl</object>
     <object>objects\obj_bgStar</object>
     <object>objects\obj_puSpinner</object>
     <object>objects\obj_puD</object>
@@ -55,8 +58,13 @@
     <object>objects\obj_shield1</object>
     <object>objects\obj_shield2</object>
     <object>objects\object24</object>
+    <objects name="Title">
+      <object>objects\obj_taptoplay</object>
+      <object>objects\obj_title</object>
+    </objects>
   </objects>
   <rooms name="rooms">
+    <room>rooms\title</room>
     <room>rooms\room0</room>
   </rooms>
   <help>

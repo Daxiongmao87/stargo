@@ -3,7 +3,7 @@
   <spriteName>spr_asteroid</spriteName>
   <solid>0</solid>
   <visible>-1</visible>
-  <depth>0</depth>
+  <depth>-1</depth>
   <persistent>0</persistent>
   <parentName>&lt;undefined&gt;</parentName>
   <maskName>&lt;undefined&gt;</maskName>
@@ -30,7 +30,10 @@ direction = random(360);
 image_xscale = random_range(0.01,0.05);
 image_yscale = image_xscale;
 original_speed = random_range(5,10)*image_xscale/0.05;
+x_speed = 0;
+y_speed = 0;
 speed = original_speed;
+
 </string>
           </argument>
         </arguments>
@@ -54,8 +57,11 @@ speed = original_speed;
           <argument>
             <kind>1</kind>
             <string>speed = clamp(speed-(speed*1.5)*global.dt,0,original_speed);
+x += x_speed*global.dt;
+y += y_speed*global.dt;
 image_alpha = speed/original_speed;
 if(speed == 0) instance_destroy();
+
 </string>
           </argument>
         </arguments>

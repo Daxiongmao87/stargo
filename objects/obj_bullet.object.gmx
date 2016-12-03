@@ -96,9 +96,11 @@ if(other.hp &lt;= 0) {
         asteroid.x_speed = random_range(-200,200)*(1.5-asteroid.image_xscale);
         
     }
-    for(i = 0; i &lt; 200*(other.image_xscale/0.75); i++){
-        instance_create(x,y,obj_dust);
-    }
+    for(i = 0; i &lt; round(50.0*global.particle_density); i++) {
+        dust = instance_create(other.x,other.y,obj_dust);
+        dust.y_speed = other.y_speed;
+        dust.x_speed = other.x_speed;        
+        }
     if(other.asteroid_spawn == 0 &amp;&amp;random_range(0,1) &gt; 0.95) {
         switch(round(random_range(0,2))) {
         case 2:
@@ -112,8 +114,20 @@ if(other.hp &lt;= 0) {
             break;
         }
     }
+    asteroid_explosion = instance_create(other.x,other.y,obj_explosion);
+    asteroid_explosion.y_speed = other.y_speed;
+    asteroid_explosion.x_speed = other.x_speed;
+    asteroid_explosion.image_blend = other.image_blend;
+    asteroid_explosion.image_xscale = (sprite_get_width(spr_asteroid)*other.image_xscale)/sprite_get_width(spr_newExplode)*1.25;
+    asteroid_explosion.image_yscale = (sprite_get_height(spr_asteroid)*other.image_yscale)/sprite_get_height(spr_newExplode)*1.25;
     with (other) instance_destroy();
 }
+chip_amount = round(5*(damage/10)*global.particle_density);
+    for(i = 0; i &lt; chip_amount; i++) {
+        dust = instance_create(x,y,obj_dust);
+        dust.y_speed = other.y_speed;
+        dust.x_speed = other.x_speed;
+        }
 instance_destroy();
 </string>
           </argument>

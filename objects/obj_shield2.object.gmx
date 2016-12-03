@@ -65,10 +65,15 @@
         asteroid.x_speed = random_range(-200,200)*(1.5-asteroid.image_xscale);
         
     }
-    for(i = 0; i &lt; 200*(other.image_xscale/0.75); i++){
-        instance_create(x,y,obj_dust);
-    }
-
+    for(i = 0; i &lt; (50*global.particle_density); i++) {
+        instance_create(other.x,other.y,obj_dust);
+        }
+    asteroid_explosion = instance_create(other.x,other.y,obj_explosion);
+    asteroid_explosion.y_speed = other.y_speed;
+    asteroid_explosion.x_speed = other.x_speed;
+    asteroid_explosion.image_blend = other.image_blend;
+    asteroid_explosion.image_xscale = (sprite_get_width(spr_asteroid)*other.image_xscale)/sprite_get_width(spr_newExplode)*1.25;
+    asteroid_explosion.image_yscale = (sprite_get_height(spr_asteroid)*other.image_yscale)/sprite_get_height(spr_newExplode)*1.25;
     with (other) instance_destroy();
 
 </string>

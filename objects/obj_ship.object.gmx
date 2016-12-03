@@ -35,6 +35,7 @@ shield_powerup_starttime = 15;
 shield_powerup_timer = 0;
 weapon_type = 0;
 fire = false;
+z_tilt = 0;
 fire_rate = 0.175; //seconds
 fire_timer = 0.25;
 instance_create(x,y,obj_sight);
@@ -71,8 +72,8 @@ for(i = 0; i &lt; smooth_poll_count; i++) {
             <kind>1</kind>
             <string>x_pos = mouse_x;
 y_pos = mouse_y;
+z_tilt = device_get_tilt_z()-z_origin;
 if(visible){
-
 score+=100*global.dt*global.speed_bonus;
 mouse_x_sample[smooth_poll_count] = x_pos;
 mouse_y_sample[smooth_poll_count] = y_pos;
@@ -87,11 +88,11 @@ for(i = 0; i &lt; smooth_poll_count; i++) {
 prev_x = x;
 prev_y = y;
 x = final_mouse_x/(smooth_poll_count+1);
-y = final_mouse_y/(smooth_poll_count+1)-64;
+y = final_mouse_y/(smooth_poll_count+1)-(display_get_dpi_y()/display_get_gui_height()*view_hport[0]);
 x_delta = abs(x-prev_x);
 y_delta = clamp(prev_y-y,0,abs(prev_y-y));
 distance_delta = y_delta;//sqrt(sqr(x_delta)+sqr(y_delta));
-thruster_counter += (distance_delta*0.25 + 1*(global.ship_speed/200))*global.dt;
+thruster_counter += (distance_delta*0.25 + 1*(global.ship_speed/global.ship_startspeed))*global.dt;
 thruster_counter = clamp(thruster_counter,-2,thruster_interval*2);
 if(thruster_counter &gt; thruster_interval) {
     thruster_counter += -thruster_interval;
@@ -111,11 +112,25 @@ if(weapon_powerup_timer &gt; 0){
     }
     weapon_type = 0;
 }
-if(mouse_wheel_up()) {
-    global.ship_speed = clamp(global.ship_speed+100*global.dt,150,500);
+if(mouse_wheel_up() || z_tilt &gt; 0.15) {
+    global.ship_speed = clamp(global.ship_speed+400*global.dt,global.ship_minspeed,global.ship_maxspeed);
 }
 if(mouse_wheel_down()) {
-    global.ship_speed = clamp(global.ship_speed-100*global.dt,150,500);
+    global.ship_speed = clamp(global.ship_speed-400*global.dt,global.ship_minspeed,global.ship_maxspeed);
+}
+
+if(keyboard_check(vk_up)) {
+   global.ship_speed = clamp(global.ship_speed+400*global.dt,global.ship_minspeed,global.ship_maxspeed);
+}
+if(keyboard_check(vk_down)) {
+   global.ship_speed = clamp(global.ship_speed-400*global.dt,global.ship_minspeed,global.ship_maxspeed);
+}
+
+if(z_tilt &lt; -0.15) {
+    global.ship_speed = clamp(global.ship_speed+1000*global.dt*-sqr(z_tilt),global.ship_minspeed,global.ship_maxspeed);
+}
+if(z_tilt &gt; +0.15) {
+    global.ship_speed = clamp(global.ship_speed+1000*global.dt*sqr(z_tilt),global.ship_minspeed,global.ship_maxspeed);
 }
 //x = mouse_x;
 //y = mouse_y
@@ -317,6 +332,10 @@ weapon_type = 1;
             <string>mouse_x_start = mouse_x;
 mouse_y_start = mouse_y;
 global.speed_bonus = 1;
+global.ship_maxspeed = 600;
+global.ship_startspeed = 300;
+global.ship_minspeed = 200;
+z_origin = device_get_tilt_z();
 </string>
           </argument>
         </arguments>

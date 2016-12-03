@@ -25,11 +25,33 @@
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>global.dt = delta_time/1000000;
+            <string>///FPS counter
+fps_sample[fps_pollamount] = fps_real;
+final_fps = fps_real;
+for(i = 0; i &lt; fps_pollamount; i++) {
+    if(fps_sample[i+1] == 0) {
+        fps_sample[i] = fps_sample[fps_pollamount];
+    } else {
+        fps_sample[i] = fps_sample[i+1];
+        final_fps += fps_sample[i];
+        }
+}
+///
+fps_average = final_fps/(fps_pollamount+1);
+///reduce global particle density if framerate drops
+if(fps_average &lt; 60) {
+global.particle_density += -0.1*global.dt*4;
+}
+
+if(keyboard_check_pressed(vk_pagedown)) {
+    global.particle_density += -0.1;
+}
+global.dt = delta_time/1000000;
 elapsed_time += global.dt;
 asteroid_timer += global.dt;
 bgstar_timer += global.dt;
 bgplanet_timer += global.dt;
+window_mouse_set(clamp(window_mouse_get_x(),0,window_get_width()),clamp(window_mouse_get_y(),0,window_get_height()));
 if(asteroid_timer &gt; asteroid_interval) {
     asteroid = instance_create(random(room_width),-64,obj_asteroid);
     asteroid.image_xscale = random_range(0.25,0.75);
@@ -47,7 +69,7 @@ if(asteroid_timer &gt; asteroid_interval) {
     asteroid_interval = 1*clamp((end_game_time-elapsed_time)/end_game_time,0.2,3)*(250/global.ship_speed);
 }
 if(bgstar_timer &gt; bgstar_interval) {
-    for(i = 0; i &lt; 5; i++){
+    for(i = 0; i &lt; clamp(round(5.0*global.particle_density),1,5); i++){
         instance_create(random(room_width),random_range(-128,-64),obj_bgStar);
         }
     bgstar_timer += -asteroid_interval;
@@ -57,7 +79,7 @@ if(bgstar_timer &gt; bgstar_interval) {
 ship_normalx = obj_ship.x/room_width;
 view_xview[0] = ship_normalx*(room_width-view_wview[0]);
 if(keyboard_check(vk_backspace))
-    room_restart();
+    room_goto(title);
 </string>
           </argument>
         </arguments>
@@ -80,14 +102,18 @@ if(keyboard_check(vk_backspace))
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>//surface_resize(application_surface, display_get_width(), display_get_height());
+            <string>//surface_resize(application_surface, window_get_width(), window_get_height());
 display_set_gui_size(window_get_width(),window_get_height());
-room_width = window_get_width()*1.12109375;
-room_height = window_get_height();
+//room_width = window_get_width()*1.12109375;
+//room_height = window_get_height();
 obj_ship.x = room_width/2;
 obj_ship.y = room_height/10*8;
-view_hview[0] = window_get_height();
-view_wview[0] = window_get_width();
+//view_hview[0] = window_get_height();
+//view_wview[0] = window_get_width();
+fps_pollseconds = 0.5;
+fps_pollamount = round(room_speed*fps_pollseconds);
+fps_average = 0;
+global.particle_density = 1;
 global.dt = delta_time/1000000;
 score = 0;
 elapsed_time = 0;
@@ -124,13 +150,42 @@ for(i = 0; i &lt; 100; i++) {
           <argument>
             <kind>1</kind>
             <string>//display_set_gui_size(window_get_width(),window_get_height());
-room_width = window_get_width()*1.12109375;
-room_height = window_get_height();
+//room_width = window_get_width()*1.12109375;
+//room_height = window_get_height();
 obj_ship.x = room_width/2;
 obj_ship.y = room_height/10*8;
-view_hview[0] = window_get_height();
-view_wview[0] = window_get_width();
-audio_play_sound(Music,10,true);
+//view_hview[0] = window_get_height();
+//view_wview[0] = window_get_width();
+
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="8" enumb="77">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>shader_set(shader0);
+ draw_enable_alphablend(false);
+ draw_set_alpha_test(false);
+ //draw_surface_stretched(application_surface, 0, 0, view_wport[0], view_hport[0]);
+ draw_enable_alphablend(true);
+ draw_set_alpha_test(true);
+shader_reset();
 </string>
           </argument>
         </arguments>
@@ -197,33 +252,39 @@ audio_play_sound(Music,10,true);
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>zeros = 10-string_length(string(score));
+            <string>//surface_resize(application_surface, window_get_width(), window_get_height());
+draw_set_halign(fa_center);
+draw_set_valign(fa_top);
+display_set_gui_size(window_get_width(),window_get_height());
+zeros = 10-string_length(string(score));
 score_string = "";
-room_width = window_get_width()*1.12109375;
-room_height = window_get_height();
-view_hview[0] = window_get_height();
-view_wview[0] = window_get_width();
+
 for(i = 0; i &lt; zeros; i++) {
     score_string = score_string + "0";
 }
 score_string = score_string + string(score);
-draw_text_transformed(view_wview[0]/2,0,score_string,view_wview[0]/512,view_hview[0]/892,0);
-if(floor(global.ship_speed/50) &gt; 5) {
-    if(floor(global.ship_speed/50) != 10) {
-        global.speed_bonus = floor((global.ship_speed-50)/100);
-        draw_text_transformed(view_wview[0]/2,32*view_hview[0]/892,"SPEED BONUS " + string(floor((global.ship_speed-50)/100)) + "x",view_wview[0]/512,view_hview[0]/892,0);
+draw_text_transformed(window_get_width()/2,0,score_string,window_get_width()/512,window_get_height()/896,0);
+if(floor(global.ship_speed) &gt; ceil(global.ship_startspeed/100)*100) {
+    if(global.ship_speed != global.ship_maxspeed) {
+        global.speed_bonus = clamp(floor((global.ship_speed-global.ship_startspeed)/100)+1,0,10);
+        draw_text_transformed(window_get_width()/2,32*window_get_height()/896,"SPEED BONUS " + string(floor((global.ship_speed-50)/100)) + "x",window_get_width()/512,window_get_height()/896,0);
         
     }
     else {
-        draw_text_transformed(view_wview[0]/2,32*view_hview[0]/892,"TOP SPEED BONUS 10x",view_wview[0]/512,view_hview[0]/892,0);
+        draw_text_transformed(window_get_width()/2,32*window_get_height()/896,"TOP SPEED BONUS 10x",window_get_width()/512,window_get_height()/896,0);
         global.speed_bonus = 10;
     }
 } else {
 global.speed_bonus = 1;
 }
-draw_sprite_ext(spr_speedBar,0,view_wview[0]-32*view_wview[0]/512,view_hview[0]-32*view_hview[0]/892,view_wview[0]/512,view_hview[0]/892,0,c_white,1);
-indicator_position = view_hview[0]-32*view_hview[0]/892-sprite_get_height(spr_speedBar)*view_hview[0]/892*(global.ship_speed-150)/350;
-draw_sprite_ext(spr_speedIndicator,0,view_wview[0]-32*view_wview[0]/512,indicator_position,view_wview[0]/512,view_hview[0]/892,0,c_white,1);
+draw_sprite_ext(spr_speedBar,0,window_get_width()-32*window_get_width()/512,window_get_height()-32*window_get_height()/896,window_get_width()/512,window_get_height()/896,0,c_white,1);
+indicator_position = window_get_height()-32*window_get_height()/896-sprite_get_height(spr_speedBar)*window_get_height()/896*(global.ship_speed-global.ship_minspeed)/(global.ship_maxspeed-global.ship_minspeed);
+draw_sprite_ext(spr_speedIndicator,0,window_get_width()-32*window_get_width()/512,indicator_position,window_get_width()/512,window_get_height()/896,0,c_white,1);
+draw_text_transformed(window_get_width()-32*window_get_width()/512,window_get_height()-24*window_get_height()/896,"TILT",window_get_width()/512*0.5,window_get_height()/896*0.5,0);
+draw_set_halign(fa_right);
+
+draw_set_valign(fa_middle);
+draw_text_transformed(window_get_width()-64*window_get_width()/512,indicator_position,string(round(global.ship_speed*2.5)) + "MPH",window_get_width()/512*0.5,window_get_height()/896*0.5,0);
 </string>
           </argument>
         </arguments>
