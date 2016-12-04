@@ -8,19 +8,27 @@
     <sound>sound\Music</sound>
   </sounds>
   <sprites name="sprites">
+    <sprite>sprites\spr_glow</sprite>
     <sprite>sprites\spr_bullet</sprite>
     <sprite>sprites\spr_bgPlanet</sprite>
+    <sprite>sprites\spr_bgstar2</sprite>
     <sprite>sprites\spr_thruster</sprite>
+    <sprite>sprites\spr_ship2</sprite>
     <sprite>sprites\spr_ship</sprite>
     <sprite>sprites\spr_asteroid</sprite>
     <sprite>sprites\spr_bulletExplode</sprite>
     <sprite>sprites\spr_newExplode</sprite>
     <sprite>sprites\spr_thrusterShadow</sprite>
+    <sprite>sprites\sprite24</sprite>
+    <sprite>sprites\spr_thruster_flame_glow</sprite>
     <sprite>sprites\spr_shipShadow</sprite>
     <sprite>sprites\spr_shipSight</sprite>
+    <sprite>sprites\spr_bullet2</sprite>
     <sprite>sprites\spr_bgStar</sprite>
     <sprite>sprites\sprite14</sprite>
+    <sprite>sprites\sprite27</sprite>
     <sprite>sprites\spr_shield1</sprite>
+    <sprite>sprites\sprite23</sprite>
     <sprite>sprites\spr_shield2</sprite>
     <sprite>sprites\spr_puD</sprite>
     <sprite>sprites\spr_puT</sprite>
@@ -30,8 +38,11 @@
     <sprite>sprites\spr_timerbar</sprite>
     <sprite>sprites\spr_speedIndicator</sprite>
     <sprite>sprites\spr_speedBar</sprite>
+    <sprite>sprites\spr_thruster_flame</sprite>
   </sprites>
-  <backgrounds name="background"/>
+  <backgrounds name="background">
+    <background>background\background0</background>
+  </backgrounds>
   <paths name="paths"/>
   <shaders name="shaders">
     <shader type="GLSLES">shaders\shader0.shader</shader>
@@ -43,11 +54,13 @@
     <object>objects\obj_explosion</object>
     <object>objects\obj_thruster</object>
     <object>objects\obj_sight</object>
+    <object>objects\obj_glow</object>
+    <object>objects\obj_thruster_flame_glow</object>
     <object>objects\obj_bullet</object>
     <object>objects\obj_asteroid</object>
     <object>objects\obj_dust</object>
-    <object>objects\obj_ship</object>
     <object>objects\obj_bgPlanet</object>
+    <object>objects\obj_ship</object>
     <object>objects\obj_levelControl</object>
     <object>objects\obj_bgStar</object>
     <object>objects\obj_puSpinner</object>
@@ -62,6 +75,7 @@
       <object>objects\obj_taptoplay</object>
       <object>objects\obj_title</object>
     </objects>
+    <object>objects\obj_thrusterflame</object>
   </objects>
   <rooms name="rooms">
     <room>rooms\title</room>

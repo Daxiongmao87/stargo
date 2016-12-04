@@ -39,10 +39,11 @@ for(i = 0; i &lt; fps_pollamount; i++) {
 ///
 fps_average = final_fps/(fps_pollamount+1);
 ///reduce global particle density if framerate drops
-if(fps_average &lt; 60) {
+if(fps_average &lt; 45) {
 global.particle_density += -0.1*global.dt*4;
+}else if(fps_average &gt;= 60 &amp;&amp; global.particle_density &lt; 1) {
+global.particle_density += 0.1*global.dt*4;
 }
-
 if(keyboard_check_pressed(vk_pagedown)) {
     global.particle_density += -0.1;
 }

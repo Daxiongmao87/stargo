@@ -60,7 +60,7 @@
             asteroid.asteroid_spawn = 2;
         else asteroid.asteroid_spawn = 0;
         asteroid.asteroid_spawn_scale = asteroid.image_xscale-0.25;
-        asteroid.y_speed = other.y_speed;
+        asteroid.y_speed = other.y_speed*random_range(0.5,0.75);
         asteroid.rotation = random_range(-45,45)*(0.25/asteroid.image_xscale);
         asteroid.x_speed = random_range(-200,200)*(1.5-asteroid.image_xscale);
         
