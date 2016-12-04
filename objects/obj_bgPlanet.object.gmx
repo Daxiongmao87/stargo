@@ -3,7 +3,7 @@
   <spriteName>spr_bgPlanet</spriteName>
   <solid>0</solid>
   <visible>-1</visible>
-  <depth>5</depth>
+  <depth>8</depth>
   <persistent>0</persistent>
   <parentName>&lt;undefined&gt;</parentName>
   <maskName>&lt;undefined&gt;</maskName>
@@ -26,13 +26,14 @@
           <argument>
             <kind>1</kind>
             <string>image_speed = 0;
-image_index = random(image_number);
-image_xscale = random_range(0.25,1);
+image_blend = make_color_hsv(round(random_range(0,5))*42.5,127,255);
+image_xscale = random_range(0.1,0.9);
 image_yscale = image_xscale;
-
-image_blend = make_colour_rgb(random(255),random(255),random(255));
-
-y_speed = 2*image_xscale;
+shadow = instance_create(x,y,obj_bgPlanetShadow);
+shadow.image_blend = background_color;
+shadow.image_xscale = image_xscale;
+shadow.image_yscale = image_yscale;
+y_speed = image_xscale*0.5;
 </string>
           </argument>
         </arguments>
@@ -56,7 +57,10 @@ y_speed = 2*image_xscale;
           <argument>
             <kind>1</kind>
             <string>y += global.ship_speed*y_speed*global.dt;
+shadow.y = y;
+shadow.image_blend = background_color;
 if(y &gt; room_height*1.5) {
+    with (shadow) instance_destroy();
     instance_destroy();
     }
     

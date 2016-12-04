@@ -6,9 +6,11 @@
   <NewExtensions/>
   <sounds name="sound">
     <sound>sound\Music</sound>
+    <sound>sound\placeholder</sound>
   </sounds>
   <sprites name="sprites">
     <sprite>sprites\spr_glow</sprite>
+    <sprite>sprites\explosion_glow</sprite>
     <sprite>sprites\spr_bullet</sprite>
     <sprite>sprites\spr_bgPlanet</sprite>
     <sprite>sprites\spr_bgstar2</sprite>
@@ -36,13 +38,13 @@
     <sprite>sprites\spr_puS</sprite>
     <sprite>sprites\spr_timerbg</sprite>
     <sprite>sprites\spr_timerbar</sprite>
+    <sprite>sprites\spr_bgplanetshadow</sprite>
     <sprite>sprites\spr_speedIndicator</sprite>
     <sprite>sprites\spr_speedBar</sprite>
     <sprite>sprites\spr_thruster_flame</sprite>
+    <sprite>sprites\spr_bgGradient</sprite>
   </sprites>
-  <backgrounds name="background">
-    <background>background\background0</background>
-  </backgrounds>
+  <backgrounds name="background"/>
   <paths name="paths"/>
   <shaders name="shaders">
     <shader type="GLSLES">shaders\shader0.shader</shader>
@@ -70,12 +72,15 @@
     <object>objects\obj_timer</object>
     <object>objects\obj_shield1</object>
     <object>objects\obj_shield2</object>
+    <object>objects\obj_bgPlanetShadow</object>
     <object>objects\object24</object>
     <objects name="Title">
       <object>objects\obj_taptoplay</object>
       <object>objects\obj_title</object>
     </objects>
     <object>objects\obj_thrusterflame</object>
+    <object>objects\obj_explosion_glow</object>
+    <object>objects\obj_gradient</object>
   </objects>
   <rooms name="rooms">
     <room>rooms\title</room>

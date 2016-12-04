@@ -28,6 +28,8 @@
             <string>image_speed = 0.5;
 x_speed = 0;
 y_speed = 0;
+glow = instance_create(x,y,obj_explosion_glow);
+glow.parent = self;
 </string>
           </argument>
         </arguments>
@@ -54,6 +56,12 @@ y_speed = 0;
 image_yscale = image_xscale;
 y+=(y_speed+global.ship_speed)*global.dt;
 x+=(x_speed)*global.dt;
+glow.xspeed = x_speed;
+glow.yspeed = y_speed;
+glow.image_blend = image_blend;
+glow.image_xscale = image_xscale*3;
+glow.image_yscale = image_yscale*3;
+glow.image_speed = image_speed*(glow.image_number/image_number); 
 </string>
           </argument>
         </arguments>

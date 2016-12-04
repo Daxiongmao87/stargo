@@ -26,7 +26,7 @@
           <argument>
             <kind>1</kind>
             <string>global.ship_speed = 250;
-smooth_poll_count = 4;
+smooth_poll_count = 10;
 thruster_interval = 0.3;
 thruster_counter = 0.0;
 weapon_powerup_starttime = 30;

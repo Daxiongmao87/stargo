@@ -37,12 +37,19 @@ for(i = 0; i &lt; fps_pollamount; i++) {
         }
 }
 ///
+hsv_shift += 0.1*global.dt;
+if(hsv_shift &gt; 255) {
+    hsv_shift += -255;
+}
+background_color = make_color_hsv(hsv_shift,255,45.9);
 fps_average = final_fps/(fps_pollamount+1);
 ///reduce global particle density if framerate drops
-if(fps_average &lt; 45) {
-global.particle_density += -0.1*global.dt*4;
-}else if(fps_average &gt;= 60 &amp;&amp; global.particle_density &lt; 1) {
-global.particle_density += 0.1*global.dt*4;
+if(object_exists(obj_dust)){
+    if(fps_average &lt; 45) {
+        global.particle_density += -0.5*global.dt;
+    }else if(fps_average &gt;= 60 &amp;&amp; global.particle_density &lt; 1) {
+        global.particle_density += 0.5*global.dt;
+    }
 }
 if(keyboard_check_pressed(vk_pagedown)) {
     global.particle_density += -0.1;
@@ -58,8 +65,7 @@ if(asteroid_timer &gt; asteroid_interval) {
     asteroid.image_xscale = random_range(0.25,0.75);
     asteroid.image_yscale = asteroid.image_xscale;
     asteroid.x_speed = random_range(-50,50)*(1.5-asteroid.image_xscale);
-
-    asteroid.hp = 100*(asteroid.image_xscale/0.25);
+    asteroid.hp = 100*(asteroid.image_xscale/0.25); 
     if(asteroid.hp &gt;= 200) 
         asteroid.asteroid_spawn = 2;
     else asteroid.asteroid_spawn = 0;
@@ -74,9 +80,13 @@ if(bgstar_timer &gt; bgstar_interval) {
         instance_create(random(room_width),random_range(-128,-64),obj_bgStar);
         }
     bgstar_timer += -asteroid_interval;
-    bggar_interval = 0.01*(250/global.ship_speed);
+    bgstar_interval = 0.01*(250/global.ship_speed)*16;
 }
-
+if(bgplanet_timer &gt; bgplanet_interval) {
+    planet = instance_create(-512+random(room_width+512),-1024,obj_bgPlanet);
+    bgplanet_timer += - bgplanet_interval;
+    bgplanet_interval = random_range(1,60);
+}
 ship_normalx = obj_ship.x/room_width;
 view_xview[0] = ship_normalx*(room_width-view_wview[0]);
 if(keyboard_check(vk_backspace))
@@ -104,11 +114,13 @@ if(keyboard_check(vk_backspace))
           <argument>
             <kind>1</kind>
             <string>//surface_resize(application_surface, window_get_width(), window_get_height());
+randomize();
 display_set_gui_size(window_get_width(),window_get_height());
 //room_width = window_get_width()*1.12109375;
 //room_height = window_get_height();
 obj_ship.x = room_width/2;
 obj_ship.y = room_height/10*8;
+hsv_shift = 200;
 //view_hview[0] = window_get_height();
 //view_wview[0] = window_get_width();
 fps_pollseconds = 0.5;
