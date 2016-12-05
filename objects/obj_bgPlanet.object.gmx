@@ -29,11 +29,13 @@
 image_blend = make_color_hsv(round(random_range(0,5))*42.5,127,255);
 image_xscale = random_range(0.1,0.9);
 image_yscale = image_xscale;
+depth = random_range(6,8);
 shadow = instance_create(x,y,obj_bgPlanetShadow);
 shadow.image_blend = background_color;
 shadow.image_xscale = image_xscale;
 shadow.image_yscale = image_yscale;
-y_speed = image_xscale*0.5;
+shadow.depth = depth+1;
+y_speed = image_xscale*0.5+random_range(-0.2,0.2);
 </string>
           </argument>
         </arguments>

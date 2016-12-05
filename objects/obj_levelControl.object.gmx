@@ -79,8 +79,8 @@ if(bgstar_timer &gt; bgstar_interval) {
     for(i = 0; i &lt; clamp(round(5.0*global.particle_density),1,5); i++){
         instance_create(random(room_width),random_range(-128,-64),obj_bgStar);
         }
-    bgstar_timer += -asteroid_interval;
-    bgstar_interval = 0.01*(250/global.ship_speed)*32
+    bgstar_timer += -bgstar_interval;
+    bgstar_interval = 2*(250/global.ship_speed);
 }
 if(bgplanet_timer &gt; bgplanet_interval) {
     planet = instance_create(-512+random(room_width+512),-1024,obj_bgPlanet);
@@ -297,7 +297,7 @@ draw_text_transformed(window_get_width()-32*window_get_width()/512,window_get_he
 draw_set_halign(fa_right);
 
 draw_set_valign(fa_middle);
-draw_text_transformed(window_get_width()-64*window_get_width()/512,indicator_position,string(round(global.ship_speed*2.5)) + "MPH",window_get_width()/512*0.5,window_get_height()/896*0.5,0);
+draw_text_transformed(window_get_width()-64*window_get_width()/512,indicator_position,string(round(global.ship_speed*0.5)) + "KMPH",window_get_width()/512*0.5,window_get_height()/896*0.5,0);
 </string>
           </argument>
         </arguments>
