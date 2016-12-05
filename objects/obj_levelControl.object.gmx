@@ -80,7 +80,7 @@ if(bgstar_timer &gt; bgstar_interval) {
         instance_create(random(room_width),random_range(-128,-64),obj_bgStar);
         }
     bgstar_timer += -asteroid_interval;
-    bgstar_interval = 0.01*(250/global.ship_speed)*16;
+    bgstar_interval = 0.01*(250/global.ship_speed)*32
 }
 if(bgplanet_timer &gt; bgplanet_interval) {
     planet = instance_create(-512+random(room_width+512),-1024,obj_bgPlanet);
