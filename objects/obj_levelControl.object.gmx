@@ -26,6 +26,7 @@
           <argument>
             <kind>1</kind>
             <string>///FPS counter
+
 fps_sample[fps_pollamount] = fps_real;
 final_fps = fps_real;
 for(i = 0; i &lt; fps_pollamount; i++) {
@@ -45,10 +46,10 @@ background_color = make_color_hsv(hsv_shift,255,45.9);
 fps_average = final_fps/(fps_pollamount+1);
 ///reduce global particle density if framerate drops
 if(object_exists(obj_dust)){
-    if(fps_average &lt; 45) {
-        global.particle_density += -0.5*global.dt;
+    if(fps_average &lt; 50) {
+        global.particle_density =  clamp(global.particle_density-0.5*global.dt,0.1,1.0);
     }else if(fps_average &gt;= 60 &amp;&amp; global.particle_density &lt; 1) {
-        global.particle_density += 0.5*global.dt;
+        global.particle_density += clamp(global.particle_density+0.5*global.dt,0.1,1.0);
     }
 }
 if(keyboard_check_pressed(vk_pagedown)) {
@@ -59,7 +60,7 @@ elapsed_time += global.dt;
 asteroid_timer += global.dt;
 bgstar_timer += global.dt;
 bgplanet_timer += global.dt;
-window_mouse_set(clamp(window_mouse_get_x(),0,window_get_width()),clamp(window_mouse_get_y(),0,window_get_height()));
+window_mouse_set(clamp(window_mouse_get_x(),window_get_width()/2-view_wview[0]/2,window_get_width()/2+view_wview[0]/2),clamp(window_mouse_get_y(),window_get_height()/2-view_hview[0]/2,window_get_height()/2+view_hview[0]/2));
 if(asteroid_timer &gt; asteroid_interval) {
     asteroid = instance_create(random(room_width),-64,obj_asteroid);
     asteroid.image_xscale = random_range(0.25,0.75);
@@ -80,7 +81,7 @@ if(bgstar_timer &gt; bgstar_interval) {
         instance_create(random(room_width),random_range(-128,-64),obj_bgStar);
         }
     bgstar_timer += -bgstar_interval;
-    bgstar_interval = 2*(250/global.ship_speed);
+    bgstar_interval = 4*(250/global.ship_speed);
 }
 if(bgplanet_timer &gt; bgplanet_interval) {
     planet = instance_create(-512+random(room_width+512),-1024,obj_bgPlanet);
@@ -113,13 +114,10 @@ if(keyboard_check(vk_backspace))
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>//surface_resize(application_surface, window_get_width(), window_get_height());
-randomize();
-display_set_gui_size(window_get_width(),window_get_height());
+            <string>randomize();
+
 //room_width = window_get_width()*1.12109375;
 //room_height = window_get_height();
-obj_ship.x = room_width/2;
-obj_ship.y = room_height/10*8;
 hsv_shift = 200;
 //view_hview[0] = window_get_height();
 //view_wview[0] = window_get_width();
@@ -145,36 +143,6 @@ for(i = 0; i &lt; 100; i++) {
         </arguments>
       </action>
     </event>
-    <event eventtype="7" enumb="2">
-      <action>
-        <libid>1</libid>
-        <id>603</id>
-        <kind>7</kind>
-        <userelative>0</userelative>
-        <isquestion>0</isquestion>
-        <useapplyto>-1</useapplyto>
-        <exetype>2</exetype>
-        <functionname></functionname>
-        <codestring></codestring>
-        <whoName>self</whoName>
-        <relative>0</relative>
-        <isnot>0</isnot>
-        <arguments>
-          <argument>
-            <kind>1</kind>
-            <string>//display_set_gui_size(window_get_width(),window_get_height());
-//room_width = window_get_width()*1.12109375;
-//room_height = window_get_height();
-obj_ship.x = room_width/2;
-obj_ship.y = room_height/10*8;
-//view_hview[0] = window_get_height();
-//view_wview[0] = window_get_width();
-
-</string>
-          </argument>
-        </arguments>
-      </action>
-    </event>
     <event eventtype="8" enumb="77">
       <action>
         <libid>1</libid>
@@ -195,7 +163,7 @@ obj_ship.y = room_height/10*8;
             <string>shader_set(shader0);
  draw_enable_alphablend(false);
  draw_set_alpha_test(false);
- //draw_surface_stretched(application_surface, 0, 0, view_wport[0], view_hport[0]);
+ draw_surface_stretched(application_surface, 0, 0, view_wport[0], view_hport[0]);
  draw_enable_alphablend(true);
  draw_set_alpha_test(true);
 shader_reset();
@@ -265,10 +233,14 @@ shader_reset();
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>//surface_resize(application_surface, window_get_width(), window_get_height());
+            <string>surface_resize(application_surface, window_get_width(), window_get_height());
+
+view_hview[0] = global.initial_guiwidth*((global.initial_guiheight/global.initial_guiwidth)-((global.initial_guiheight/global.initial_guiwidth)-(window_get_height()/window_get_width())));
+view_hport[0] = global.initial_guiwidth*((global.initial_guiheight/global.initial_guiwidth)-((global.initial_guiheight/global.initial_guiwidth)-(window_get_height()/window_get_width())));
+
+display_set_gui_size(window_get_width(),window_get_height());
 draw_set_halign(fa_center);
 draw_set_valign(fa_top);
-display_set_gui_size(window_get_width(),window_get_height());
 zeros = 10-string_length(string(score));
 score_string = "";
 
@@ -276,28 +248,30 @@ for(i = 0; i &lt; zeros; i++) {
     score_string = score_string + "0";
 }
 score_string = score_string + string(score);
-draw_text_transformed(window_get_width()/2,0,score_string,window_get_width()/512,window_get_height()/896,0);
+draw_text_transformed(window_get_width()/2,0,score_string,window_get_width()/view_wview[0],window_get_height()/view_hview[0],0);
 if(floor(global.ship_speed) &gt; ceil(global.ship_startspeed/100)*100) {
     if(global.ship_speed != global.ship_maxspeed) {
         global.speed_bonus = clamp(floor((global.ship_speed-global.ship_startspeed)/100)+1,0,10);
-        draw_text_transformed(window_get_width()/2,32*window_get_height()/896,"SPEED BONUS " + string(floor((global.ship_speed-50)/100)) + "x",window_get_width()/512,window_get_height()/896,0);
+        draw_text_transformed(window_get_width()/2,32*window_get_height()/view_hview[0],"SPEED BONUS " + string(floor((global.ship_speed-50)/100)) + "x",window_get_width()/view_wview[0],window_get_height()/view_hview[0],0);
         
     }
     else {
-        draw_text_transformed(window_get_width()/2,32*window_get_height()/896,"TOP SPEED BONUS 10x",window_get_width()/512,window_get_height()/896,0);
+        draw_text_transformed(window_get_width()/2,32*window_get_height()/view_hview[0],"TOP SPEED BONUS 10x",window_get_width()/view_wview[0],window_get_height()/view_hview[0],0);
         global.speed_bonus = 10;
     }
 } else {
 global.speed_bonus = 1;
 }
-draw_sprite_ext(spr_speedBar,0,window_get_width()-32*window_get_width()/512,window_get_height()-32*window_get_height()/896,window_get_width()/512,window_get_height()/896,0,c_white,1);
-indicator_position = window_get_height()-32*window_get_height()/896-sprite_get_height(spr_speedBar)*window_get_height()/896*(global.ship_speed-global.ship_minspeed)/(global.ship_maxspeed-global.ship_minspeed);
-draw_sprite_ext(spr_speedIndicator,0,window_get_width()-32*window_get_width()/512,indicator_position,window_get_width()/512,window_get_height()/896,0,c_white,1);
-draw_text_transformed(window_get_width()-32*window_get_width()/512,window_get_height()-24*window_get_height()/896,"TILT",window_get_width()/512*0.5,window_get_height()/896*0.5,0);
+draw_sprite_ext(spr_speedBar,0,window_get_width()-32*window_get_width()/view_wview[0],window_get_height()-32*window_get_height()/view_hview[0],window_get_width()/view_wview[0],window_get_height()/view_hview[0],0,c_white,1);
+indicator_position = window_get_height()-32*window_get_height()/view_hview[0]-sprite_get_height(spr_speedBar)*window_get_height()/view_hview[0]*(global.ship_speed-global.ship_minspeed)/(global.ship_maxspeed-global.ship_minspeed);
+draw_sprite_ext(spr_speedIndicator,0,window_get_width()-32*window_get_width()/view_wview[0],indicator_position,window_get_width()/view_wview[0],window_get_height()/view_hview[0],0,c_white,1);
+draw_text_transformed(window_get_width()-32*window_get_width()/view_wview[0],window_get_height()-24*window_get_height()/view_hview[0],"TILT",window_get_width()/view_wview[0]*0.5,window_get_height()/view_hview[0]*0.5,0);
 draw_set_halign(fa_right);
-
+texture_set_interpolation(false);
+draw_sprite(spr_scanline,0,0,0);
+texture_set_interpolation(true);
 draw_set_valign(fa_middle);
-draw_text_transformed(window_get_width()-64*window_get_width()/512,indicator_position,string(round(global.ship_speed*0.5)) + "KMPH",window_get_width()/512*0.5,window_get_height()/896*0.5,0);
+draw_text_transformed(window_get_width()-64*window_get_width()/view_wview[0],indicator_position,string(round(global.ship_speed*0.5)) + "KMPH",window_get_width()/view_wview[0]*0.5,window_get_height()/view_hview[0]*0.5,0);
 </string>
           </argument>
         </arguments>

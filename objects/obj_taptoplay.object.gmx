@@ -25,8 +25,10 @@
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>if(mouse_check_button(mb_any))
+            <string>//    window_mouse_set(display_get_width()/2,display_get_height()/5*4);
+if(mouse_check_button(mb_any)) {
     room_goto(room0);
+    }
 </string>
           </argument>
         </arguments>
@@ -49,9 +51,10 @@
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>application_surface_enable(false);
-surface_resize(application_surface, window_get_width(), window_get_height());
-audio_play_sound(placeholder,10,true);
+            <string>//application_surface_enable(false);
+instance_create(0,0,obj_guivars);
+audio_play_sound(Stargo_Theme,10,true);
+
 </string>
           </argument>
         </arguments>
@@ -118,11 +121,17 @@ audio_play_sound(placeholder,10,true);
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>surface_resize(application_surface, window_get_width(), window_get_height());
+            <string>//if(os_type != os_windows &amp;&amp; os_type != os_macosx) {
+    surface_resize(application_surface, window_get_width(), window_get_height());
+//    }
 display_set_gui_size(window_get_width(),window_get_height());
-//room_width = window_get_width();
-//room_height = window_get_height();
-draw_text_transformed(window_get_width()/2,window_get_height()/2,"TAP TO PLAY",window_get_width()/512,window_get_height()/896,0);
+if(display_get_gui_width() &gt; global.initial_guiwidth) {
+    draw_text_transformed(display_get_gui_width()/2,display_get_gui_height()/2,"TAP TO PLAY",round(display_get_gui_width()/global.initial_guiwidth),round(display_get_gui_width()/global.initial_guiwidth),0);
+    draw_sprite_ext(spr_title,-1,display_get_gui_width()/2,display_get_gui_height()/4,round(display_get_gui_width()/global.initial_guiwidth),round(display_get_gui_width()/global.initial_guiwidth),0,c_white,1);
+    } else {
+    draw_text_transformed(display_get_gui_width()/2,display_get_gui_height()/2,"TAP TO PLAY",1/round(global.initial_guiwidth/display_get_gui_width()),1/round(global.initial_guiwidth/display_get_gui_width()),0);
+    draw_sprite_ext(spr_title,-1,display_get_gui_width()/2,display_get_gui_height()/4,1/round(global.initial_guiwidth/display_get_gui_width()),1/round(global.initial_guiwidth/display_get_gui_width()),0,c_white,1);    
+    }
 </string>
           </argument>
         </arguments>

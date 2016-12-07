@@ -7,6 +7,7 @@
   <sounds name="sound">
     <sound>sound\Music</sound>
     <sound>sound\placeholder</sound>
+    <sound>sound\Stargo_Theme</sound>
   </sounds>
   <sprites name="sprites">
     <sprite>sprites\spr_glow</sprite>
@@ -27,7 +28,7 @@
     <sprite>sprites\spr_shipSight</sprite>
     <sprite>sprites\spr_bullet2</sprite>
     <sprite>sprites\spr_bgStar</sprite>
-    <sprite>sprites\sprite14</sprite>
+    <sprite>sprites\spr_title</sprite>
     <sprite>sprites\sprite27</sprite>
     <sprite>sprites\spr_shield1</sprite>
     <sprite>sprites\sprite23</sprite>
@@ -40,6 +41,8 @@
     <sprite>sprites\spr_timerbar</sprite>
     <sprite>sprites\spr_bgplanetshadow</sprite>
     <sprite>sprites\spr_speedIndicator</sprite>
+    <sprite>sprites\spr_scanline</sprite>
+    <sprite>sprites\spr_scanline2</sprite>
     <sprite>sprites\spr_speedBar</sprite>
     <sprite>sprites\spr_thruster_flame</sprite>
     <sprite>sprites\spr_bgGradient</sprite>
@@ -76,7 +79,7 @@
     <object>objects\object24</object>
     <objects name="Title">
       <object>objects\obj_taptoplay</object>
-      <object>objects\obj_title</object>
+      <object>objects\obj_guivars</object>
     </objects>
     <object>objects\obj_thrusterflame</object>
     <object>objects\obj_explosion_glow</object>

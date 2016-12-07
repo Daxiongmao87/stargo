@@ -26,6 +26,7 @@
           <argument>
             <kind>1</kind>
             <string>global.ship_speed = 250;
+
 smooth_poll_count = 10;
 thruster_interval = 0.3;
 thruster_counter = 0.0;
@@ -47,9 +48,16 @@ shields_activated = false;
 trigun_sights = false;
 t_sight1 = undefined;
 t_sight2 = undefined;
-for(i = 0; i &lt; smooth_poll_count; i++) {
-    mouse_x_sample[i] = 0;
-    mouse_y_sample[i] = 0;
+//window_mouse_set(room_width/2,room_height/4*3);
+x = room_width/2;
+y = room_height/5*4;
+final_mouse_x = 0;
+final_mouse_y = 0;
+for(i = 0; i &lt; smooth_poll_count+1; i++) {
+    mouse_x_sample[i] = x;
+    mouse_y_sample[i] = y;
+    final_mouse_x += mouse_x_sample[i];
+    final_mouse_y += mouse_y_sample[i];    
     }
 </string>
           </argument>
@@ -73,31 +81,33 @@ for(i = 0; i &lt; smooth_poll_count; i++) {
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>x_pos = mouse_x;
-y_pos = mouse_y;
-z_tilt = device_get_tilt_z()-z_origin;
-thruster_flame.visible = visible;
+            <string>thruster_flame.visible = visible;
 thruster_flame_glow.visible = visible;
 if(visible){
 score+=100*global.dt*global.speed_bonus;
+x_pos = mouse_x;
+y_pos = mouse_y;
+prev_x = final_mouse_x/(smooth_poll_count+1);
+prev_y = final_mouse_y/(smooth_poll_count+1);
 mouse_x_sample[smooth_poll_count] = x_pos;
 mouse_y_sample[smooth_poll_count] = y_pos;
 final_mouse_x = x_pos;
 final_mouse_y = y_pos;
 for(i = 0; i &lt; smooth_poll_count; i++) {
-    mouse_x_sample[i] = mouse_x_sample[i+1];
-    mouse_y_sample[i] = mouse_y_sample[i+1];
     final_mouse_x += mouse_x_sample[i];
     final_mouse_y += mouse_y_sample[i];
+    mouse_x_sample[i] = mouse_x_sample[i+1];
+    mouse_y_sample[i] = mouse_y_sample[i+1];
 }
-prev_x = x;
-prev_y = y;
 
-x = final_mouse_x/(smooth_poll_count+1);
+z_tilt = device_get_tilt_z()-z_origin;
+
+
+x = clamp(final_mouse_x/(smooth_poll_count+1),0,room_width);
 if(os_type == os_android || os_type == os_ios){
-    y = final_mouse_y/(smooth_poll_count+1)-(display_get_dpi_y()/display_get_gui_height()*view_hport[0]);
+    y = clamp(final_mouse_y/(smooth_poll_count+1)-(display_get_dpi_y()/display_get_gui_height()*view_hport[0]),0,room_height);
 } else {
-    y = final_mouse_y/(smooth_poll_count+1);
+    y = clamp(final_mouse_y/(smooth_poll_count+1),0,room_height);
 }
 
 thruster_flame.x = x;
@@ -164,15 +174,15 @@ if(fire) {
         if(weapon_type == 0) {
             fire_rate = 0.2;
             bullet1 = instance_create(x,y,obj_bullet);
-            bullet1.damage = 100;
+            bullet1.damage = 125;
             bullet1.image_blend = make_colour_rgb(64,255,255);            
         }
         if(weapon_type == 1) {
             fire_rate = 0.25;
             bullet1 = instance_create(x-12,y,obj_bullet);
             bullet2 = instance_create(x+12,y,obj_bullet);
-            bullet1.damage = 100;
-            bullet2.damage = 100;
+            bullet1.damage = 125;
+            bullet2.damage = 125;
             bullet1.image_blend = make_colour_rgb(127,255,64);
             bullet2.image_blend = make_colour_rgb(127,255,64);
         }
@@ -181,9 +191,9 @@ if(fire) {
             bullet1 = instance_create(x,y,obj_bullet);
             bullet2 = instance_create(x,y,obj_bullet);
             bullet3 = instance_create(x,y,obj_bullet);
-            bullet1.damage = 40;
-            bullet2.damage = 40;
-            bullet3.damage = 40;
+            bullet1.damage = 75;
+            bullet2.damage = 75;
+            bullet3.damage = 75;
             bullet2.image_angle = 22.6;
             bullet3.image_angle = -22.6;
             bullet2.bullet_xspeed = -bullet2.bullet_speed/2;
@@ -267,8 +277,8 @@ weapon_type = 2;
 trigun_sights = true;
 t_sight1 = instance_create(x,y,obj_sight);
 t_sight2 = instance_create(x,y,obj_sight);
-t_sight1.image_angle = 25;
-t_sight2.image_angle = -25;
+t_sight1.image_angle = 23;
+t_sight2.image_angle = -23;
 t_sight1.image_yscale = 0.75;
 t_sight2.image_yscale = 0.75;
 </string>
@@ -352,8 +362,7 @@ weapon_type = 1;
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>mouse_x_start = mouse_x;
-mouse_y_start = mouse_y;
+            <string>
 global.speed_bonus = 1;
 global.ship_maxspeed = 600;
 global.ship_startspeed = 300;

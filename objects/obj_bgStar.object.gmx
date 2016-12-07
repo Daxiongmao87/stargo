@@ -39,7 +39,7 @@ image_blend = make_colour_rgb(255,224+random(32),192+random(32));
 image_blend = make_colour_rgb(192+random(32),224+random(32),255);
 }
 
-y_speed = image_xscale*0.25;
+y_speed = image_xscale*0.15;
 </string>
           </argument>
         </arguments>
