@@ -42,7 +42,7 @@ fire_timer = 0.25;
 thruster_flame = instance_create(x,y,obj_thrusterflame);
 thruster_flame_glow = instance_create(x,y,obj_thruster_flame_glow);
 thruster_flame_glow.parent = thruster_flame;
-instance_create(x,y,obj_sight);
+prime_sight = instance_create(x,y,obj_sight);
 instance_create(x,y,obj_timer);
 shields_activated = false;
 trigun_sights = false;
@@ -128,7 +128,7 @@ thruster_counter += (distance_delta*0.25 + 1*(global.ship_speed/global.ship_star
 thruster_counter = clamp(thruster_counter,-2,thruster_interval*2);
 if(thruster_counter &gt; thruster_interval) {
     thruster_counter += -thruster_interval;
-    thruster = instance_create(x,y,obj_thruster);
+    thruster = instance_create(thruster_flame.x,thruster_flame.y,obj_thruster);
     thruster.image_blend = merge_color(thruster_flame.image_blend,make_color_rgb(192,192,192),0.5);
     if(y_delta &gt; 0) thruster.y_extraspeed = y_delta;
 }
@@ -138,13 +138,13 @@ if(shield_powerup_timer &gt; 0){
 if(weapon_powerup_timer &gt; 0){
     weapon_powerup_timer += -global.dt;
 } else if(weapon_type != 0) {
-    if(trigun_sights) {
+    weapon_type = 0;
+}
+    if(weapon_type != 2 &amp;&amp; trigun_sights) {
         trigun_sights = false;
         with(t_sight1) instance_destroy();
         with(t_sight2) instance_destroy();
     }
-    weapon_type = 0;
-}
 if(mouse_wheel_up() || z_tilt &gt; 0.15) {
     global.ship_speed = clamp(global.ship_speed+400*global.dt,global.ship_minspeed,global.ship_maxspeed);
 }
@@ -174,15 +174,17 @@ if(fire) {
         if(weapon_type == 0) {
             fire_rate = 0.2;
             bullet1 = instance_create(x,y,obj_bullet);
+            prime_sight.image_xscale = 1;
             bullet1.damage = 125;
             bullet1.image_blend = make_colour_rgb(64,255,255);            
         }
         if(weapon_type == 1) {
-            fire_rate = 0.25;
+            fire_rate = 0.15;
             bullet1 = instance_create(x-12,y,obj_bullet);
             bullet2 = instance_create(x+12,y,obj_bullet);
-            bullet1.damage = 125;
-            bullet2.damage = 125;
+            prime_sight.image_xscale = 2;
+            bullet1.damage = 100;
+            bullet2.damage = 100;
             bullet1.image_blend = make_colour_rgb(127,255,64);
             bullet2.image_blend = make_colour_rgb(127,255,64);
         }
@@ -194,6 +196,7 @@ if(fire) {
             bullet1.damage = 75;
             bullet2.damage = 75;
             bullet3.damage = 75;
+            prime_sight.image_xscale = 1;
             bullet2.image_angle = 22.6;
             bullet3.image_angle = -22.6;
             bullet2.bullet_xspeed = -bullet2.bullet_speed/2;

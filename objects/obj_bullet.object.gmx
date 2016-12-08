@@ -101,12 +101,25 @@ if(other.hp &lt;= 0) {
         asteroid.rotation = random_range(-45,45)*(0.25/asteroid.image_xscale);
         asteroid.x_speed = random_range(-200,200)*(1.5-asteroid.image_xscale);
         
-    }
+    }/*
     for(i = 0; i &lt; round(25.0*global.particle_density); i++) {
         dust = instance_create(other.x,other.y,obj_dust);
         dust.y_speed = other.y_speed;
         dust.x_speed = other.x_speed;        
-        }
+        }*/
+          
+    for(i = 0; i &lt; round(100.0*global.particle_density*other.image_xscale); i++) {
+        part_speed = random_range(2,10);
+        part_life = random_range(0.8,1.2)/global.dt;
+        part_type_life(global.dust_particle,part_life,part_life);
+        part_type_size(global.dust_particle,0.01,0.05,0,0);
+        part_type_direction(global.dust_particle,0,360,0,0);
+        part_type_speed(global.dust_particle,part_speed,part_speed,-(part_speed/part_life)*0.5,0);        
+        part_particles_create(global.P_explosion,other.x,other.y,global.dust_particle,1);
+    }
+    //part_emitter_region(global.P_explosion,global.dust_particle,other.x-other.sprite_width*other.image_xscale/2,other.x+other.sprite_width*other.image_xscale/2,other.y-other.sprite_height*other.image_yscale/2,other.y+other.sprite_height*other.image_yscale/2,ps_shape_ellipse,ps_distr_gaussian);
+    //part_emitter_burst(global.P_explosion,global.dust_emitter,global.dust_particle,50*global.particle_density);
+
     if(other.asteroid_spawn == 0 &amp;&amp;random_range(0,1) &gt; 0.95) {
         switch(round(random_range(0,2))) {
         case 2:
@@ -128,12 +141,17 @@ if(other.hp &lt;= 0) {
     asteroid_explosion.image_yscale = (sprite_get_height(spr_asteroid)*other.image_yscale)/sprite_get_height(spr_newExplode)*1.25;
     with (other) instance_destroy();
 }
-chip_amount = round(3*(damage/10)*global.particle_density);
-    for(i = 0; i &lt; chip_amount; i++) {
-        dust = instance_create(x,y,obj_dust);
-        dust.y_speed = other.y_speed;
-        dust.x_speed = other.x_speed;
-        }
+chip_amount = round(3*(damage/20)*global.particle_density);
+
+for(i = 0; i &lt; chip_amount; i++){
+        part_speed = random_range(8,14);
+        part_life = random_range(0.2,0.6)/global.dt;
+        part_type_life(global.bullet_particle,part_life,part_life);
+        part_type_size(global.bullet_particle,0.01,0.05,0,0);
+        part_type_direction(global.bullet_particle,point_direction(other.x,other.y,x,y)-67.5,point_direction(other.x,other.y,x,y)+67.50,0,0);
+        part_type_speed(global.bullet_particle,part_speed,part_speed,-(part_speed/part_life)*0.5,0);        
+        part_particles_create(global.P_explosion,x,y,global.bullet_particle,1);
+}
 with (glow) instance_destroy();
 instance_destroy();
 </string>

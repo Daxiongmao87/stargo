@@ -90,8 +90,11 @@ if(bgplanet_timer &gt; bgplanet_interval) {
 }
 ship_normalx = obj_ship.x/room_width;
 view_xview[0] = ship_normalx*(room_width-view_wview[0]);
-if(keyboard_check(vk_backspace))
+if(keyboard_check(vk_backspace)) {
+    part_type_destroy(global.dust_particle);
+    part_system_destroy(global.P_explosion);
     room_goto(title);
+    }
 </string>
           </argument>
         </arguments>
@@ -138,6 +141,48 @@ bgplanet_timer = 0;
 for(i = 0; i &lt; 100; i++) {
     instance_create(random(room_width),-100+random(room_height+100),obj_bgStar);
 }
+</string>
+          </argument>
+        </arguments>
+      </action>
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///Particle System
+global.P_explosion = part_system_create();
+global.dust_particle=part_type_create();
+global.bullet_particle=part_type_create();
+part_type_sprite(global.dust_particle,spr_asteroid,false,false,true);
+part_type_color1(global.dust_particle,c_white);
+part_type_alpha2(global.dust_particle,1.0,0);
+//part_type_direction(global.dust_particle,0,360,0,0);
+part_type_orientation(global.dust_particle,0,360,0,0,false);
+
+part_type_sprite(global.bullet_particle,spr_asteroid,false,false,true);
+part_type_color1(global.bullet_particle,c_white);
+part_type_alpha2(global.bullet_particle,1.0,0);
+//part_type_direction(global.dust_particle,0,360,0,0);
+part_type_orientation(global.bullet_particle,0,360,0,0,false);
+
+//global.dust_emitter=part_emitter_create(global.P_explosion);
+
+
+global.P_stars = part_system_create();
+global.star_particle=part_type_create();
+
 </string>
           </argument>
         </arguments>

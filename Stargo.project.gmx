@@ -82,8 +82,10 @@
       <object>objects\obj_guivars</object>
     </objects>
     <object>objects\obj_thrusterflame</object>
+    <object>objects\obj_thrusterflamehighlight</object>
     <object>objects\obj_explosion_glow</object>
     <object>objects\obj_gradient</object>
+    <object>objects\object28</object>
   </objects>
   <rooms name="rooms">
     <room>rooms\title</room>

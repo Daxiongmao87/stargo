@@ -53,7 +53,7 @@ if(mouse_check_button(mb_any)) {
             <kind>1</kind>
             <string>//application_surface_enable(false);
 instance_create(0,0,obj_guivars);
-audio_play_sound(Stargo_Theme,10,true);
+//audio_play_sound(Stargo_Theme,10,true);
 
 </string>
           </argument>
