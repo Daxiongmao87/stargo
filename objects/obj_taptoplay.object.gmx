@@ -53,8 +53,12 @@ if(mouse_check_button(mb_any)) {
             <kind>1</kind>
             <string>//application_surface_enable(false);
 instance_create(0,0,obj_guivars);
-//audio_play_sound(Stargo_Theme,10,true);
-
+audio_play_sound(Stargo_Theme,10,true);
+window_ratio = view_wview[0]/view_hview[0];
+window_height = display_get_height()/3*2;
+window_width = window_height*window_ratio;
+window_set_size(window_width,window_height);
+window_set_position(display_get_width()/2-window_width/2,display_get_height()/2-window_height/2);
 </string>
           </argument>
         </arguments>
